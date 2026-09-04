@@ -1,0 +1,45 @@
+name: news_paper_app
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  equatable: ^2.1.0
+  
+  url_launcher: ^6.3.2
+  dartz: ^0.10.1
+  cupertino_icons: ^1.0.8
+  flutter_bloc: ^9.1.1
+  dio: ^5.11.0
+  google_fonts: ^6.3.2
+  flutter_dotenv: ^6.0.1
+  get_it: ^9.2.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  cached_network_image: ^3.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+
+flutter:
+
+ 
+  uses-material-design: true
+  assets:
+    - .env
+    - assets/images/Image-not-found.png
+
+ 
