@@ -6,7 +6,6 @@ import 'package:news_paper_app/core/routes/app_routes.dart';
 import 'package:news_paper_app/presentation/cubits/search/search_cubit.dart';
 import 'package:news_paper_app/presentation/widgets/home_widgets/article_card.dart';
 import 'package:news_paper_app/presentation/widgets/search_widgets/input_search.dart';
-import 'package:news_paper_app/presentation/widgets/search_widgets/recent_searches.dart';
 import 'package:news_paper_app/presentation/widgets/search_widgets/trending_topics.dart';
 
 class SearchView extends StatefulWidget {
@@ -22,17 +21,13 @@ class _SearchViewState extends State<SearchView> {
   final FocusNode _searchFocusNode = FocusNode();
   Timer? _debounce;
 
-  final List<String> _recentSearches = [
-    'Climate change',
-    'World Cup',
-    'AI ethics',
-  ];
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_searchFocusNode);
+
+      context.read<SearchCubit>().getRecentSearches();
     });
 
     _scrollController.addListener(_onScroll);
@@ -55,18 +50,6 @@ class _SearchViewState extends State<SearchView> {
     }
 
     context.read<SearchCubit>().search(trimedQuery);
-  }
-
-  void _removeRecentSearch(String search) {
-    setState(() {
-      _recentSearches.remove(search);
-    });
-  }
-
-  void _clearRecentSearches() {
-    setState(() {
-      _recentSearches.clear();
-    });
   }
 
   void _selectTrendingTopic(String topic) {
@@ -137,87 +120,102 @@ class _SearchViewState extends State<SearchView> {
 
             BlocBuilder<SearchCubit, SearchState>(
               builder: (context, state) {
-                if (state is SearchInitial) {
-                  return SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        children: [
-                          RecentSearches(
-                            searches: _recentSearches,
-                            onClear: _clearRecentSearches,
-                            onRemove: _removeRecentSearch,
-                            onSelect: (search) {
-                              _searchController.text = search;
-                            },
-                          ),
+                // Recent Searches
+                if (state is RecentSearchesLoaded) {
+                  final searches = state.searches;
 
-                          const SizedBox(height: 30),
-
-                          TrendingTopics(onTopicSelected: _selectTrendingTopic),
-
-                          const SizedBox(height: 30),
-                        ],
+                  if (searches.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: TrendingTopics(
+                        onTopicSelected: (value) => _selectTrendingTopic(value),
                       ),
-                    ),
+                    );
+                  }
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final search = searches[index];
+
+                      return ListTile(
+                        leading: const Icon(Icons.history),
+                        title: Text(search),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            context.read<SearchCubit>().removeSearch(search);
+                          },
+                        ),
+                        onTap: () {
+                          _searchController.text = search;
+                          _performSearch(search);
+                        },
+                      );
+                    }, childCount: searches.length),
                   );
                 }
 
                 if (state is SearchLoading) {
                   return const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                // Search Results
+                if (state is SearchLoaded) {
+                  final articles = state.articles;
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final article = articles[index];
+
+                      return ArticleCard(article: article);
+                    }, childCount: articles.length),
+                  );
+                }
+
+                // Loading More
+                if (state is SearchLoadingMore) {
+                  final articles = state.articles;
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      if (index == articles.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      return ArticleCard(article: articles[index]);
+                    }, childCount: articles.length + 1),
+                  );
+                }
+                if (state is SearchError) {
+                  return SliverFillRemaining(
                     child: Center(
                       child: Padding(
-                        padding: EdgeInsets.all(32),
-                        child: CircularProgressIndicator(),
+                        padding: const EdgeInsets.all(24),
+                        child: Text(
+                          state.message,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ),
                     ),
                   );
                 }
 
-                if (state is SearchError) {
-                  return SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Center(child: Text(state.message)),
+                return SliverPadding(
+                  padding: const EdgeInsets.only(
+                    right: 24,
+                    left: 24,
+                    bottom: 16,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: TrendingTopics(
+                      onTopicSelected: (value) => _selectTrendingTopic(value),
                     ),
-                  );
-                }
-
-                if (state is SearchLoaded || state is SearchLoadingMore) {
-                  final articles =
-                      state is SearchLoaded
-                          ? state.articles
-                          : (state as SearchLoadingMore).articles;
-
-                  if (articles.isEmpty) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.all(24),
-                        child: Center(child: Text('No articles found')),
-                      ),
-                    );
-                  }
-
-                  final isLoadingMore = state is SearchLoadingMore;
-
-                  return SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        if (index == articles.length) {
-                          return const Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                        }
-
-                        return ArticleCard(article: articles[index]);
-                      }, childCount: articles.length + (isLoadingMore ? 1 : 0)),
-                    ),
-                  );
-                }
-
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
+                  ),
+                );
               },
             ),
           ],

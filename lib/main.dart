@@ -29,10 +29,8 @@ class NewspapersApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Newspapers App',
-
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-
         themeMode: ThemeMode.light,
         initialRoute: AppRoutes.homePageRoute,
         onGenerateRoute: AppRouter.onGenerateRoute,

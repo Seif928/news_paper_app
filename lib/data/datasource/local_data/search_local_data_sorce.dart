@@ -51,6 +51,7 @@ class SearchLocalDataSource {
       if (e is CacheException) {
         rethrow;
       }
+      print('SaveRecentSearches error: $e');
       throw const CacheException('Failed to save recent searches.');
     }
   }

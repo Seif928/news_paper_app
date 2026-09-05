@@ -1,11 +1,11 @@
 import 'package:news_paper_app/core/errors/exceptions.dart';
 import 'package:news_paper_app/core/errors/failuer.dart';
 import 'package:news_paper_app/domain/entities/news_result.dart';
-import 'package:news_paper_app/domain/repositories/base_newspapers_repository.dart';
+import 'package:news_paper_app/domain/repositories/base_search_repository.dart';
 
 class GetEverythingUseCase {
-  final BaseNewspapersRepository repository;
-  GetEverythingUseCase(this.repository);
+  final BaseSearchRepository searchRepository;
+  GetEverythingUseCase(this.searchRepository);
   Future<NewsResult> call({
     required String query,
     String? sources,
@@ -16,7 +16,7 @@ class GetEverythingUseCase {
     int page = 1,
     int pageSize = 20,
   }) async {
-    final result = await repository.getEverything(
+    final result = await searchRepository.getEverything(
       query: query,
       sources: sources,
       language: language,
