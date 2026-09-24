@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
-import 'package:news_paper_app/presentation/cubits/favorite/favorite_cubit.dart';
+import 'package:news_paper_app/presentation/cubits/favorite/saved_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ArticleDetailsPage extends StatelessWidget {
@@ -30,7 +31,7 @@ class ArticleDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = context.watch<FavoriteCubit>().isFavorite(article.url);
+    final isFavorite = context.watch<SavedCubit>().isSaved(article.url);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -38,7 +39,7 @@ class ArticleDetailsPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              context.read<FavoriteCubit>().toggleFavorite(article);
+              context.read<SavedCubit>().toggleSaved(article);
             },
             icon: Icon(
               isFavorite ? Icons.bookmark : Icons.bookmark_border,
@@ -66,7 +67,7 @@ class ArticleDetailsPage extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  _buildArticleInfo(),
+                  _buildArticleInfo(context),
 
                   const SizedBox(height: 20),
 
@@ -92,7 +93,11 @@ class ArticleDetailsPage extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: _openArticle,
                       icon: const Icon(Icons.open_in_browser),
-                      label: const Text('Read Full Article'),
+                      label: Text(
+                        context.locale.languageCode == 'ar'
+                            ? 'اقرأ المقال كاملا'
+                            : 'Read Full Article',
+                      ),
                     ),
                   ),
 
@@ -132,7 +137,7 @@ class ArticleDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildArticleInfo() {
+  Widget _buildArticleInfo(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -144,7 +149,9 @@ class ArticleDetailsPage extends StatelessWidget {
 
               Expanded(
                 child: Text(
-                  article.author ?? 'Unknown author',
+                  context.locale.languageCode == 'ar'
+                      ? article.author ?? 'غير معروف'
+                      : article.author ?? 'Unknown author',
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

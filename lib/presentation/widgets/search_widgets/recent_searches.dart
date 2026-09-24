@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class RecentSearches extends StatelessWidget {
@@ -16,6 +17,7 @@ class RecentSearches extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.locale;
     final theme = Theme.of(context);
 
     return Column(
@@ -23,13 +25,13 @@ class RecentSearches extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text('Recent Searches', style: theme.textTheme.headlineSmall),
+            Text("Recent Searches".tr(), style: theme.textTheme.headlineSmall),
 
             const Spacer(),
 
             TextButton(
               onPressed: searches.isEmpty ? null : onClear,
-              child: const Text('Clear'),
+              child: Text("Clear".tr()),
             ),
           ],
         ),
@@ -37,7 +39,7 @@ class RecentSearches extends StatelessWidget {
         const SizedBox(height: 14),
 
         if (searches.isEmpty)
-          Text('No recent searches', style: theme.textTheme.bodyLarge)
+          Text("No recent searches".tr(), style: theme.textTheme.bodyLarge)
         else
           ListView.separated(
             shrinkWrap: true,

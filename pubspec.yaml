@@ -27,6 +27,14 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   cached_network_image: ^3.4.1
+  easy_localization: ^3.0.8 
+  firebase_core: ^4.14.0
+  firebase_auth: ^6.6.1
+  cloud_firestore: ^6.9.0
+  google_sign_in: ^7.2.0
+  flutter_facebook_auth: ^7.1.6
+  flutter_local_notifications: ^19.5.0
+  firebase_messaging: ^16.7.0
 
 dev_dependencies:
   flutter_test:
@@ -41,5 +49,9 @@ flutter:
   assets:
     - .env
     - assets/images/Image-not-found.png
+    - assets/translations/en.json
+    - assets/translations/ar.json
+    - assets/logo's/Google__G__logo.svg.webp    
+    - assets/images/photo_2026-07-16_03-07-31.jpg
 
  

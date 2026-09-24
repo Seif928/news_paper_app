@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/core/routes/app_routes.dart';
 import 'package:news_paper_app/core/utils/date_utils.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
-import 'package:news_paper_app/presentation/cubits/favorite/favorite_cubit.dart';
+import 'package:news_paper_app/presentation/cubits/favorite/saved_cubit.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
@@ -13,7 +13,7 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = context.watch<FavoriteCubit>().isFavorite(article.url);
+    final isFavorite = context.watch<SavedCubit>().isSaved(article.url);
 
     return InkWell(
       onTap: () {
@@ -70,7 +70,7 @@ class ArticleCard extends StatelessWidget {
 
                       IconButton(
                         onPressed: () {
-                          context.read<FavoriteCubit>().toggleFavorite(article);
+                          context.read<SavedCubit>().toggleSaved(article);
                         },
                         icon: Icon(
                           isFavorite

@@ -11,20 +11,28 @@ final class SearchInitial extends SearchState {}
 
 final class SearchLoading extends SearchState {}
 
-final class SearchLoaded extends SearchState {
+class SearchLoaded extends SearchState {
   final List<Article> articles;
-  final bool hasMore;
-  const SearchLoaded({required this.articles, required this.hasMore});
+  final int currentPage;
+  final int totalPages;
+
+  const SearchLoaded({
+    required this.articles,
+    required this.currentPage,
+    required this.totalPages,
+  });
+
   @override
-  List<Object> get props => [articles, hasMore];
+  List<Object> get props => [articles, currentPage, totalPages];
 }
 
-final class SearchLoadingMore extends SearchState {
-  final List<Article> articles;
-  final bool hasMore;
-  const SearchLoadingMore({required this.articles, required this.hasMore});
+class SearchLoadingPage extends SearchState {
+  final int page;
+
+  const SearchLoadingPage({required this.page});
+
   @override
-  List<Object> get props => [articles, hasMore];
+  List<Object> get props => [page];
 }
 
 final class RecentSearchesLoaded extends SearchState {
@@ -34,6 +42,14 @@ final class RecentSearchesLoaded extends SearchState {
 
   @override
   List<Object> get props => [searches];
+}
+
+class SearchSuggestionsLoaded extends SearchState {
+  final List<String> suggestions;
+  const SearchSuggestionsLoaded({required this.suggestions});
+
+  @override
+  List<Object> get props => [suggestions];
 }
 
 final class SearchError extends SearchState {

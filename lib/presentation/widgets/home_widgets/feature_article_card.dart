@@ -6,7 +6,7 @@ import 'package:news_paper_app/core/theme/app_theme.dart';
 import 'package:news_paper_app/core/utils/date_utils.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
 
-import 'package:news_paper_app/presentation/cubits/favorite/favorite_cubit.dart';
+import 'package:news_paper_app/presentation/cubits/favorite/saved_cubit.dart';
 
 class FeaturedArticleCard extends StatelessWidget {
   final Article article;
@@ -17,7 +17,7 @@ class FeaturedArticleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final isFavorite = context.watch<FavoriteCubit>().isFavorite(article.url);
+    final isFavorite = context.watch<SavedCubit>().isSaved(article.url);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -95,9 +95,7 @@ class FeaturedArticleCard extends StatelessWidget {
 
                         IconButton(
                           onPressed: () {
-                            context.read<FavoriteCubit>().toggleFavorite(
-                              article,
-                            );
+                            context.read<SavedCubit>().toggleSaved(article);
                           },
                           icon: Icon(
                             color: Theme.of(context).colorScheme.secondary,

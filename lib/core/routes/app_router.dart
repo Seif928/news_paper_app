@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:news_paper_app/core/routes/app_routes.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
-import 'package:news_paper_app/presentation/pages/about_page.dart';
 import 'package:news_paper_app/presentation/pages/article_details_page.dart';
-import 'package:news_paper_app/presentation/pages/favorite_page.dart';
+import 'package:news_paper_app/presentation/pages/login_page.dart';
+import 'package:news_paper_app/presentation/pages/privacy_policy_page.dart';
+import 'package:news_paper_app/presentation/pages/register_page.dart';
+import 'package:news_paper_app/presentation/pages/saved_page.dart';
 import 'package:news_paper_app/presentation/pages/home_page.dart';
+import 'package:news_paper_app/presentation/pages/notifications_page.dart';
 import 'package:news_paper_app/presentation/pages/search_page.dart';
 import 'package:news_paper_app/presentation/pages/settings_page.dart';
 
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      // case AppRoutes.splashPageRoute:
+      //   return MaterialPageRoute(builder: (_) => const SplashPage());
+      case AppRoutes.loginPageRoute:
+        return MaterialPageRoute(builder: (_) => const LoginPage());
+      case AppRoutes.registerPageRoute:
+        return MaterialPageRoute(builder: (_) => const RegisterPage());
       case AppRoutes.homePageRoute:
         return MaterialPageRoute(builder: (_) => const HomePage());
       case AppRoutes.searchPageRoute:
@@ -23,12 +32,14 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => ArticleDetailsPage(article: article),
         );
-      case AppRoutes.favoritePageRoute:
-        return MaterialPageRoute(builder: (_) => const FavoritePage());
+      case AppRoutes.notificationPageRoute:
+        return MaterialPageRoute(builder: (_) => const NotificationPage());
+      case AppRoutes.savedPageRoute:
+        return MaterialPageRoute(builder: (_) => const SavedPage());
       case AppRoutes.settingsPageRoute:
         return MaterialPageRoute(builder: (_) => const SettingsPage());
-      case AppRoutes.aboutPageRoute:
-        return MaterialPageRoute(builder: (_) => const AboutPage());
+      case AppRoutes.privacyPolicyPageRoute:
+        return MaterialPageRoute(builder: (_) => const PrivacyPolicyPage());
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());
     }

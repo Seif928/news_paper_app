@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class TrendingTopics extends StatefulWidget {
@@ -12,7 +13,7 @@ class TrendingTopics extends StatefulWidget {
 class _TrendingTopicsState extends State<TrendingTopics> {
   int selectedIndex = -1;
 
-  final List<String> topics = const [
+  final List<String> topicsEn = const [
     'Technology',
     'Global Economy',
     'AI',
@@ -21,8 +22,17 @@ class _TrendingTopicsState extends State<TrendingTopics> {
     'World Cup',
   ];
 
+  final List<String> topicsAr = const [
+    'تكنولوجيا',
+    'اقتصاد عالمي',
+    'ذكاء اصطناعي',
+    'مناخ',
+    'رياضة',
+    'كأس العالم',
+  ];
   @override
   Widget build(BuildContext context) {
+    context.locale;
     final theme = Theme.of(context);
 
     return Column(
@@ -38,7 +48,7 @@ class _TrendingTopicsState extends State<TrendingTopics> {
 
             const SizedBox(width: 10),
 
-            Text('Trending Topics', style: theme.textTheme.headlineSmall),
+            Text('Trending Topics'.tr(), style: theme.textTheme.headlineSmall),
           ],
         ),
 
@@ -47,11 +57,15 @@ class _TrendingTopicsState extends State<TrendingTopics> {
         Wrap(
           spacing: 10,
           runSpacing: 10,
-          children: List.generate(topics.length, (index) {
+          children: List.generate(topicsEn.length, (index) {
             final isSelected = selectedIndex == index;
 
             return ChoiceChip(
-              label: Text(topics[index]),
+              label: Text(
+                context.locale == const Locale('ar')
+                    ? topicsAr[index]
+                    : topicsEn[index],
+              ),
               selected: isSelected,
               showCheckmark: false,
 
@@ -60,7 +74,7 @@ class _TrendingTopicsState extends State<TrendingTopics> {
                   selectedIndex = isSelected ? -1 : index;
                 });
 
-                widget.onTopicSelected?.call(topics[index]);
+                widget.onTopicSelected?.call(topicsEn[index]);
               },
 
               selectedColor: theme.colorScheme.secondary.withValues(

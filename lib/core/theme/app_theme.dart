@@ -6,6 +6,7 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFF0054CD);
   static const Color backgroundColor = Color(0xFFF9F9F9);
   static const Color surfaceColor = Color(0xFFFFFFFF);
+  static const Color notificationRemoveColor = Color(0xFFE20808);
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
@@ -18,6 +19,7 @@ class AppTheme {
       primary: primaryColor,
       secondary: secondaryColor,
       surface: surfaceColor,
+      error: notificationRemoveColor,
     ),
 
     textTheme: TextTheme(
@@ -94,6 +96,7 @@ class AppTheme {
 
     colorScheme: ColorScheme.fromSeed(
       seedColor: const Color(0xFF4DA3FF),
+      error: notificationRemoveColor,
       brightness: Brightness.dark,
     ),
 
