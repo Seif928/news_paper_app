@@ -15,48 +15,51 @@ class SearchCubit extends Cubit<SearchState> {
   final GetEverythingUseCase getEverythingUseCase;
   final BaseSearchRepository baseSearchRepository;
 
-  final List<Article> _articles = [];
-
   String _query = '';
 
   SearchFilter _filter = const SearchFilter();
 
   int _currentPage = 1;
 
-  bool _hasMore = true;
-
-  bool _isLoadingMore = false;
-
   int _searchRequestId = 0;
 
-  List<Article> get articles => List.unmodifiable(_articles);
+  int _suggestionsRequestId = 0;
+
+  int _totalPages = 1;
+  static const int _pageSize = 12;
 
   Future<void> search(String query, {SearchFilter? filter}) async {
     final trimmedQuery = query.trim();
-
     if (trimmedQuery.isEmpty) return;
 
     final currentRequestId = ++_searchRequestId;
 
     _query = trimmedQuery;
-
-    if (filter != null) {
-      _filter = filter;
-    }
+    if (filter != null) _filter = filter;
 
     _currentPage = 1;
-    _hasMore = true;
-    _isLoadingMore = false;
-
-    _articles.clear();
 
     emit(SearchLoading());
 
+    await _fetchPage(_currentPage, currentRequestId);
+  }
+
+  Future<void> goToPage(int page) async {
+    if (page == _currentPage || page < 1 || page > _totalPages) return;
+
+    final currentRequestId = ++_searchRequestId;
+
+    emit(SearchLoadingPage(page: page));
+
+    await _fetchPage(page, currentRequestId);
+  }
+
+  Future<void> _fetchPage(int page, int requestId) async {
     try {
       final result = await getEverythingUseCase(
         query: _query,
-        page: _currentPage,
-        pageSize: 12,
+        page: page,
+        pageSize: _pageSize,
         sortBy: _filter.sortBy,
         language: _filter.language,
         from: _filter.from,
@@ -64,33 +67,33 @@ class SearchCubit extends Cubit<SearchState> {
         sources: _filter.sources,
       );
 
-      if (currentRequestId != _searchRequestId) {
-        return;
-      }
+      if (requestId != _searchRequestId) return;
 
-      _articles.addAll(result.articles);
-
-      _hasMore = _articles.length < result.totalResults;
+      _currentPage = page;
+      _totalPages = (result.totalResults / _pageSize).ceil().clamp(1, 999999);
 
       emit(
-        SearchLoaded(articles: List.unmodifiable(_articles), hasMore: _hasMore),
+        SearchLoaded(
+          articles: List.unmodifiable(result.articles),
+          currentPage: _currentPage,
+          totalPages: _totalPages,
+        ),
       );
-      await saveRecentSearch(_query);
-    } on NetworkException catch (e) {
-      if (currentRequestId != _searchRequestId) return;
 
+      if (page == 1) {
+        await saveRecentSearch(_query);
+      }
+    } on NetworkException catch (e) {
+      if (requestId != _searchRequestId) return;
       emit(SearchError(message: e.message));
     } on ServerException catch (e) {
-      if (currentRequestId != _searchRequestId) return;
-
+      if (requestId != _searchRequestId) return;
       emit(SearchError(message: e.message));
     } on CacheException catch (e) {
-      if (currentRequestId != _searchRequestId) return;
-
+      if (requestId != _searchRequestId) return;
       emit(SearchError(message: e.message));
     } catch (_) {
-      if (currentRequestId != _searchRequestId) return;
-
+      if (requestId != _searchRequestId) return;
       emit(
         const SearchError(message: 'Something went wrong. Please try again.'),
       );
@@ -169,6 +172,40 @@ class SearchCubit extends Cubit<SearchState> {
     );
   }
 
+  Future<void> getSuggestions(String query) async {
+    final trimmedQuery = query.trim();
+
+    if (trimmedQuery.isEmpty) {
+      emit(const SearchSuggestionsLoaded(suggestions: []));
+      return;
+    }
+
+    final currentRequestId = ++_suggestionsRequestId;
+
+    try {
+      final result = await getEverythingUseCase(
+        query: trimmedQuery,
+        page: 1,
+        pageSize: 10,
+      );
+
+      if (currentRequestId != _suggestionsRequestId) return;
+
+      final suggestions =
+          result.articles
+              .map((a) => a.title)
+              .whereType<String>()
+              .toSet()
+              .take(6)
+              .toList();
+
+      emit(SearchSuggestionsLoaded(suggestions: suggestions));
+    } catch (_) {
+      if (currentRequestId != _suggestionsRequestId) return;
+      emit(const SearchSuggestionsLoaded(suggestions: []));
+    }
+  }
+
   Future<void> applyFilters() async {
     if (_query.isEmpty) return;
 
@@ -177,69 +214,5 @@ class SearchCubit extends Cubit<SearchState> {
 
   void clearFilters() {
     _filter = const SearchFilter();
-  }
-
-  Future<void> loadMore() async {
-    if (_isLoadingMore || !_hasMore || _query.isEmpty) {
-      return;
-    }
-
-    _isLoadingMore = true;
-
-    emit(
-      SearchLoadingMore(
-        articles: List.unmodifiable(_articles),
-        hasMore: _hasMore,
-      ),
-    );
-
-    try {
-      final nextPage = _currentPage + 1;
-
-      final result = await getEverythingUseCase(
-        query: _query,
-        page: nextPage,
-        pageSize: 12,
-        sortBy: _filter.sortBy,
-        language: _filter.language,
-        from: _filter.from,
-        to: _filter.to,
-        sources: _filter.sources,
-      );
-
-      final newArticles = result.articles;
-
-      if (newArticles.isEmpty) {
-        _hasMore = false;
-      } else {
-        _currentPage = nextPage;
-
-        _articles.addAll(newArticles);
-
-        _hasMore = _articles.length < result.totalResults;
-      }
-
-      emit(
-        SearchLoaded(articles: List.unmodifiable(_articles), hasMore: _hasMore),
-      );
-    } on NetworkException catch (_) {
-      emit(
-        SearchLoaded(articles: List.unmodifiable(_articles), hasMore: _hasMore),
-      );
-    } on ServerException catch (_) {
-      emit(
-        SearchLoaded(articles: List.unmodifiable(_articles), hasMore: _hasMore),
-      );
-    } on CacheException catch (_) {
-      emit(
-        SearchLoaded(articles: List.unmodifiable(_articles), hasMore: _hasMore),
-      );
-    } catch (_) {
-      emit(
-        SearchLoaded(articles: List.unmodifiable(_articles), hasMore: _hasMore),
-      );
-    } finally {
-      _isLoadingMore = false;
-    }
   }
 }

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "13035281684",
+    "project_id": "alakhbar-5f66d",
+    "storage_bucket": "alakhbar-5f66d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13035281684:android:022e0ac2d42e836bcdf601",
+        "android_client_info": {
+          "package_name": "com.example.news_paper_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13035281684-ukdnai7162rb0j31g6votn6qa9bm1ajn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC41hRVqv7gSzUMgsBg_4GE-TIbKEC5FOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13035281684-ukdnai7162rb0j31g6votn6qa9bm1ajn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "13035281684-cnegq8ksem0tgqtvesdu1sg22pg846g5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.newsPaperApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

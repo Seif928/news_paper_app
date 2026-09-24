@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
 import 'package:news_paper_app/presentation/widgets/home_widgets/latest_news_card.dart';
@@ -9,12 +10,16 @@ class LatestNewsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.locale;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Latest News', style: Theme.of(context).textTheme.headlineSmall),
+          Text(
+            "Latest News".tr(),
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
 
           const SizedBox(height: 18),
 

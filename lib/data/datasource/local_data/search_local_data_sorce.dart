@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:hive/hive.dart';
 import 'package:news_paper_app/core/errors/exceptions.dart';
 
@@ -36,14 +35,13 @@ class SearchLocalDataSource {
     try {
       final box = Hive.box<String>(boxName);
       final searches = await getRecentSearches();
-      final normalizedQuery = query.trim();
 
-      if (normalizedQuery.isEmpty) {
+      if (query.isEmpty) {
         return;
       }
-      searches.remove(normalizedQuery);
-      searches.insert(0, normalizedQuery);
-      if (searches.length > 6) {
+      searches.remove(query);
+      searches.insert(0, query);
+      if (searches.length > 10) {
         searches.removeLast();
       }
       await box.put(recentSearchesKey, jsonEncode(searches));

@@ -1,10 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:news_paper_app/core/routes/app_routes.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.locale;
+
     final theme = Theme.of(context);
 
     return Row(
@@ -27,7 +31,7 @@ class HomeHeader extends StatelessWidget {
         Expanded(
           child: Center(
             child: Text(
-              'Newspapers App',
+              "Al Akhbar".tr(),
               style: theme.textTheme.headlineMedium,
             ),
           ),
@@ -36,7 +40,10 @@ class HomeHeader extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 10),
           child: IconButton(
-            onPressed: () {},
+            onPressed:
+                () => Navigator.of(
+                  context,
+                ).pushNamed(AppRoutes.notificationPageRoute),
             icon: const Icon(Icons.notifications_none),
           ),
         ),

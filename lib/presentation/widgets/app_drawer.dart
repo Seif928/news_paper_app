@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:news_paper_app/core/routes/app_routes.dart';
 
@@ -6,6 +7,7 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.locale;
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -17,22 +19,29 @@ class AppDrawer extends StatelessWidget {
             _buildDrawerItem(
               context,
               icon: Icons.home_outlined,
-              title: 'Home',
+              title: 'Home'.tr(),
               route: AppRoutes.homePageRoute,
             ),
 
             _buildDrawerItem(
               context,
               icon: Icons.search,
-              title: 'Search',
+              title: 'Search'.tr(),
               route: AppRoutes.searchPageRoute,
             ),
 
             _buildDrawerItem(
               context,
               icon: Icons.bookmark_border,
-              title: 'Favorites',
-              route: AppRoutes.favoritePageRoute,
+              title: 'Saved'.tr(),
+              route: AppRoutes.savedPageRoute,
+            ),
+
+            _buildDrawerItem(
+              context,
+              icon: Icons.notifications_none,
+              title: 'Notifications'.tr(),
+              route: AppRoutes.notificationPageRoute,
             ),
 
             const Divider(height: 32, indent: 16, endIndent: 16),
@@ -40,15 +49,8 @@ class AppDrawer extends StatelessWidget {
             _buildDrawerItem(
               context,
               icon: Icons.settings_outlined,
-              title: 'Settings',
+              title: 'Settings'.tr(),
               route: AppRoutes.settingsPageRoute,
-            ),
-
-            _buildDrawerItem(
-              context,
-              icon: Icons.info_outline,
-              title: 'About',
-              route: AppRoutes.aboutPageRoute,
             ),
           ],
         ),
@@ -61,23 +63,30 @@ class AppDrawer extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-            radius: 28,
-            backgroundColor: theme.colorScheme.secondary,
-            child: const Icon(Icons.newspaper, color: Colors.white, size: 30),
+            foregroundImage: AssetImage(
+              'assets/images/photo_2026-07-16_03-07-31.jpg',
+            ),
+            onForegroundImageError:
+                (exception, stackTrace) => Icon(
+                  Icons.person,
+                  color: theme.colorScheme.onSurface,
+                  size: 30,
+                ),
+            radius: 30,
           ),
 
           const SizedBox(height: 16),
 
-          Text('Newspapers App', style: theme.textTheme.headlineSmall),
+          Text('Al Akhbar'.tr(), style: theme.textTheme.headlineSmall),
 
           const SizedBox(height: 4),
 
-          Text('Your daily news', style: theme.textTheme.bodySmall),
+          Text('Your daily news'.tr(), style: theme.textTheme.bodySmall),
         ],
       ),
     );
@@ -102,6 +111,7 @@ class AppDrawer extends StatelessWidget {
           icon,
           color: isSelected ? colorScheme.secondary : colorScheme.onSurface,
         ),
+        selectedColor: isSelected ? colorScheme.secondary : null,
         title: Text(
           title,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -118,7 +128,7 @@ class AppDrawer extends StatelessWidget {
             return;
           }
 
-          Navigator.of(context).pushReplacementNamed(route);
+          Navigator.of(context).pushNamed(route);
         },
       ),
     );

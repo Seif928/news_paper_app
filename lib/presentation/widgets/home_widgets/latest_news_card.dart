@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/core/routes/app_routes.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
 
-import 'package:news_paper_app/presentation/cubits/favorite/favorite_cubit.dart';
+import 'package:news_paper_app/presentation/cubits/favorite/saved_cubit.dart';
 
 class LatestNewsCard extends StatelessWidget {
   final Article article;
@@ -15,7 +15,7 @@ class LatestNewsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final isFavorite = context.watch<FavoriteCubit>().isFavorite(article.url);
+    final isFavorite = context.watch<SavedCubit>().isSaved(article.url);
 
     return InkWell(
       onTap: () {
@@ -57,9 +57,7 @@ class LatestNewsCard extends StatelessWidget {
 
                         IconButton(
                           onPressed: () {
-                            context.read<FavoriteCubit>().toggleFavorite(
-                              article,
-                            );
+                            context.read<SavedCubit>().toggleSaved(article);
                           },
                           icon: Icon(
                             color: Theme.of(context).colorScheme.secondary,

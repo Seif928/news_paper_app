@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class InputSearch extends StatelessWidget {
@@ -6,10 +7,12 @@ class InputSearch extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final ValueChanged<String> onTaped;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? suffixIconOnPressed;
   final bool autoFocus;
   final FocusNode? focusNode;
   const InputSearch({
     super.key,
+    required this.suffixIconOnPressed,
     required this.onTaped,
     required this.focusNode,
     required this.controller,
@@ -21,6 +24,8 @@ class InputSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.locale;
+
     final theme = Theme.of(context);
 
     return Row(
@@ -36,24 +41,42 @@ class InputSearch extends StatelessWidget {
         ),
 
         Expanded(
-          child: TextField(
-            focusNode: focusNode,
-            onChanged: onChanged,
-            controller: controller,
-            textInputAction: TextInputAction.search,
-            onSubmitted: onSubmitted,
-            autofocus: autoFocus,
-            style: theme.textTheme.bodyLarge,
-            decoration: InputDecoration(
-              hintText: 'Search news, topics, or sources...',
-              prefixIcon: InkWell(
-                onTap: () {
-                  onTaped(controller.text);
-                },
-                child: Icon(Icons.search, size: 25),
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-            ),
+          child: ValueListenableBuilder(
+            valueListenable: controller,
+            builder: (context, value, child) {
+              return TextField(
+                focusNode: focusNode,
+                onChanged: onChanged,
+                controller: controller,
+
+                textInputAction: TextInputAction.search,
+                onSubmitted: onSubmitted,
+                autofocus: autoFocus,
+                style: theme.textTheme.bodyLarge,
+                decoration: InputDecoration(
+                  hintText: 'Search news, topics, or sources...'.tr(),
+                  prefixIcon: InkWell(
+                    onTap: () {
+                      onTaped(controller.text);
+                    },
+                    child: Icon(Icons.search, size: 25),
+                  ),
+                  suffixIcon:
+                      controller.text.trim().isNotEmpty
+                          ? IconButton(
+                            onPressed: () {
+                              suffixIconOnPressed!(controller.text);
+                            },
+                            icon: Icon(Icons.clear),
+                          )
+                          : null,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 4,
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ],

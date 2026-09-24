@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/core/routes/app_routes.dart';
 import 'package:news_paper_app/core/utils/date_utils.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
-import 'package:news_paper_app/presentation/cubits/favorite/favorite_cubit.dart';
+import 'package:news_paper_app/presentation/cubits/favorite/saved_cubit.dart';
 
-class FavoriteArticleCard extends StatelessWidget {
+class SavedArticleCard extends StatelessWidget {
   final Article article;
 
-  const FavoriteArticleCard({super.key, required this.article});
+  const SavedArticleCard({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +72,11 @@ class FavoriteArticleCard extends StatelessWidget {
 
                         IconButton(
                           onPressed: () {
-                            context.read<FavoriteCubit>().toggleFavorite(
-                              article,
-                            );
+                            context.read<SavedCubit>().toggleSaved(article);
                           },
                           icon: const Icon(Icons.bookmark),
                           color: theme.colorScheme.secondary,
-                          tooltip: 'Remove from favorites',
+                          tooltip: "Remove from Saved".tr(),
                         ),
                       ],
                     ),

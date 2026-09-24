@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:news_paper_app/core/routes/app_routes.dart';
 
@@ -6,6 +7,8 @@ class HomeSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.locale;
+
     return InkWell(
       onTap: () {
         Navigator.of(
@@ -15,7 +18,7 @@ class HomeSearchBar extends StatelessWidget {
       child: TextField(
         enabled: false,
         decoration: InputDecoration(
-          hintText: 'Search news, topics, or sources...',
+          hintText: "Search news, topics, or sources...".tr(),
           prefixIcon: const Icon(Icons.search),
           hintStyle: Theme.of(context).textTheme.bodyLarge,
         ),
