@@ -75,43 +75,6 @@ class NewsRepositoryImpl implements BaseNewspapersRepository {
   }
 
   @override
-  Future<Either<Failure, NewsResult>> getEverything({
-    required String query,
-    String? sources,
-    String? language,
-    DateTime? from,
-    DateTime? to,
-    String? sortBy,
-    int page = 1,
-    int pageSize = 20,
-  }) async {
-    try {
-      final remoteNews = await remoteDataSource.getEverything(
-        query: query,
-        page: page,
-        pageSize: pageSize,
-        language: language,
-        sortBy: sortBy,
-        from: from,
-        to: to,
-        sources: sources,
-      );
-      return Right(
-        NewsResult(
-          totalResults: remoteNews.totalResults,
-          articles: remoteNews.articles,
-        ),
-      );
-    } on NetworkException {
-      return Left(NetworkFailure(message: 'check your internet connection.'));
-    } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message));
-    } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
-    }
-  }
-
-  @override
   Future<Either<Failure, List<Article>>> getSources() async {
     return const Right([]);
   }

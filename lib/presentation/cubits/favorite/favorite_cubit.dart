@@ -2,22 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/core/errors/exceptions.dart';
 import 'package:news_paper_app/domain/entities/article.dart' show Article;
-import 'package:news_paper_app/domain/usecases/favorite/AddFavoriteUseCase.dart';
-import 'package:news_paper_app/domain/usecases/favorite/GetFavoritesUseCase.dart';
-import 'package:news_paper_app/domain/usecases/favorite/RemoveFavoriteUseCase.dart';
-
+import 'package:news_paper_app/domain/repositories/base_favorite_reposirotry.dart';
 part 'favorite_state.dart';
 
 class FavoriteCubit extends Cubit<FavoriteState> {
-  final GetFavoritesUseCase getFavoritesUseCase;
-  final AddFavoriteUseCase addFavoriteUseCase;
-  final RemoveFavoriteUseCase removeFavoriteUseCase;
-
-  FavoriteCubit({
-    required this.getFavoritesUseCase,
-    required this.addFavoriteUseCase,
-    required this.removeFavoriteUseCase,
-  }) : super(FavoriteInitial());
+  final BaseFavoriteRepository favoriteRepository;
+  FavoriteCubit(this.favoriteRepository) : super(FavoriteInitial());
 
   final List<Article> _favorites = [];
 
@@ -31,7 +21,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     emit(FavoriteLoading());
 
     try {
-      final articles = await getFavoritesUseCase();
+      final articles = await favoriteRepository.getFavorites();
 
       _favorites
         ..clear()
@@ -51,7 +41,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     }
 
     try {
-      await addFavoriteUseCase(article);
+      await favoriteRepository.addFavorite(article);
 
       _favorites.add(article);
 
@@ -65,7 +55,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
 
   Future<void> removeFavorite(String url) async {
     try {
-      await removeFavoriteUseCase(url);
+      await favoriteRepository.removeFavorite(url);
 
       _favorites.removeWhere((article) => article.url == url);
 

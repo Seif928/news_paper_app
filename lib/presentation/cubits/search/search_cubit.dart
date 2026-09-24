@@ -3,14 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/core/errors/exceptions.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
 import 'package:news_paper_app/domain/entities/search_filter.dart';
-import 'package:news_paper_app/domain/usecases/news/get_everthing_use_case.dart';
+import 'package:news_paper_app/domain/repositories/base_search_repository.dart';
+import 'package:news_paper_app/domain/usecases/search/get_everthing_use_case.dart';
 
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit(this.getEverythingUseCase) : super(SearchInitial());
+  SearchCubit(this.getEverythingUseCase, this.baseSearchRepository)
+    : super(SearchInitial());
 
   final GetEverythingUseCase getEverythingUseCase;
+  final BaseSearchRepository baseSearchRepository;
 
   final List<Article> _articles = [];
 
@@ -72,6 +75,7 @@ class SearchCubit extends Cubit<SearchState> {
       emit(
         SearchLoaded(articles: List.unmodifiable(_articles), hasMore: _hasMore),
       );
+      await saveRecentSearch(_query);
     } on NetworkException catch (e) {
       if (currentRequestId != _searchRequestId) return;
 
@@ -87,6 +91,62 @@ class SearchCubit extends Cubit<SearchState> {
     } catch (_) {
       if (currentRequestId != _searchRequestId) return;
 
+      emit(
+        const SearchError(message: 'Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  Future<void> getRecentSearches() async {
+    emit(SearchLoading());
+
+    try {
+      final searches = await baseSearchRepository.getRecentSearches();
+
+      emit(RecentSearchesLoaded(searches: List.unmodifiable(searches)));
+    } on CacheException catch (e) {
+      emit(SearchError(message: e.message));
+    } catch (_) {
+      emit(
+        const SearchError(message: 'Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  Future<void> saveRecentSearch(String query) async {
+    try {
+      await baseSearchRepository.saveRecentSearch(query);
+    } on CacheException catch (e) {
+      emit(SearchError(message: e.message));
+    } catch (_) {
+      emit(
+        const SearchError(message: 'Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  Future<void> removeSearch(String query) async {
+    try {
+      await baseSearchRepository.removeSearch(query);
+
+      await getRecentSearches();
+    } on CacheException catch (e) {
+      emit(SearchError(message: e.message));
+    } catch (_) {
+      emit(
+        const SearchError(message: 'Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  Future<void> clearSearches() async {
+    try {
+      await baseSearchRepository.clearSearches();
+
+      emit(const RecentSearchesLoaded(searches: []));
+    } on CacheException catch (e) {
+      emit(SearchError(message: e.message));
+    } catch (_) {
       emit(
         const SearchError(message: 'Something went wrong. Please try again.'),
       );

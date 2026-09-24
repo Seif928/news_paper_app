@@ -27,6 +27,15 @@ final class SearchLoadingMore extends SearchState {
   List<Object> get props => [articles, hasMore];
 }
 
+final class RecentSearchesLoaded extends SearchState {
+  final List<String> searches;
+
+  const RecentSearchesLoaded({required this.searches});
+
+  @override
+  List<Object> get props => [searches];
+}
+
 final class SearchError extends SearchState {
   final String message;
   const SearchError({required this.message});

@@ -10,15 +10,6 @@ abstract class BaseNewspapersRepository {
     int page = 1,
     int pageSize = 20,
   });
-  Future<Either<Failure, NewsResult>> getEverything({
-    required String query,
-    String? sources,
-    String? language,
-    DateTime? from,
-    DateTime? to,
-    String? sortBy,
-    int page = 1,
-    int pageSize = 20,
-  });
+
   Future<Either<Failure, List<Article>>> getSources();
 }
