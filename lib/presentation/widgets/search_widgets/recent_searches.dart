@@ -45,7 +45,7 @@ class RecentSearches extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: searches.length,
-            separatorBuilder: (_, __) {
+            separatorBuilder: (_, _) {
               return Divider(
                 height: 1,
                 color: theme.dividerColor.withValues(alpha: 0.5),

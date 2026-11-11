@@ -77,7 +77,7 @@ class NewspapersApp extends StatelessWidget {
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,
-            initialRoute: AppRoutes.loginPageRoute,
+            initialRoute: AppRoutes.splashPageRoute,
             onGenerateRoute: AppRouter.onGenerateRoute,
             // Allow mouse / trackpad drag on horizontal lists (Web & desktop).
             scrollBehavior: const MaterialScrollBehavior().copyWith(

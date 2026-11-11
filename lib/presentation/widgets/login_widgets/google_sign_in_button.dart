@@ -47,7 +47,7 @@ class GoogleSignInButton extends StatelessWidget {
                       width: 20,
                       height: 20,
                       errorBuilder:
-                          (_, __, ___) => Icon(
+                          (_, _, _) => Icon(
                             Icons.g_mobiledata,
                             color: colorScheme.onSurface,
                           ),

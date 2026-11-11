@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:news_paper_app/core/errors/exceptions.dart';
 
@@ -49,7 +50,7 @@ class SearchLocalDataSource {
       if (e is CacheException) {
         rethrow;
       }
-      print('SaveRecentSearches error: $e');
+      debugPrint('SaveRecentSearches error: $e');
       throw const CacheException('Failed to save recent searches.');
     }
   }

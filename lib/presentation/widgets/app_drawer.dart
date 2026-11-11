@@ -240,7 +240,7 @@ class _RailBrand extends StatelessWidget {
           height: 40,
           fit: BoxFit.contain,
           errorBuilder:
-              (_, __, ___) =>
+              (_, _, _) =>
                   Icon(Icons.newspaper, color: theme.colorScheme.secondary),
         ),
       ),

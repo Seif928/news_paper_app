@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:news_paper_app/core/errors/exceptions.dart';
 import 'package:news_paper_app/core/network/dio_client.dart';
 import 'package:news_paper_app/core/utils/api_constants.dart';
@@ -19,16 +20,16 @@ class NewsApiService {
       final response = await _dio.get(
         ApiConstants.topHeadLines,
         queryParameters: {
-          if (country != null) 'country': country,
-          if (category != null) 'category': category,
-          if (source != null) 'sources': source,
+          'country': ?country,
+          'category': ?category,
+          'sources': ?source,
           'page': page,
           'pageSize': pageSize,
         },
       );
-      print(response.requestOptions.queryParameters);
-      print('STATUS CODE: ${response.statusCode}');
-      print('RESPONSE DATA: ${response.data}');
+      debugPrint('${response.requestOptions.queryParameters}');
+      debugPrint('STATUS CODE: ${response.statusCode}');
+      debugPrint('RESPONSE DATA: ${response.data}');
       return response;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError ||
@@ -81,14 +82,14 @@ class NewsApiService {
 
           if (to != null) 'to': DateUtilsApp.formatDate(to),
 
-          if (sources != null) 'sources': sources,
-          if (language != null) 'language': language,
-          if (sortBy != null) 'sortBy': sortBy,
+          'sources': ?sources,
+          'language': ?language,
+          'sortBy': ?sortBy,
           'page': page,
           'pageSize': pageSize,
         },
       );
-      print(response.requestOptions.queryParameters);
+      debugPrint('${response.requestOptions.queryParameters}');
       return response;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError ||

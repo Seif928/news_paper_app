@@ -43,7 +43,7 @@ class ArticleImage extends StatelessWidget {
             (context, _) => ColoredBox(
               color: Theme.of(context).colorScheme.surfaceContainerHighest,
             ),
-        errorWidget: (_, __, ___) => _fallback(),
+        errorWidget: (_, _, _) => _fallback(),
       );
     }
 

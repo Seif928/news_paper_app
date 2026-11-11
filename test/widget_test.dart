@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:news_paper_app/core/utils/responsive.dart';
+import 'package:news_paper_app/domain/entities/article.dart';
+import 'package:news_paper_app/domain/repositories/base_saved_reposirotry.dart';
+import 'package:news_paper_app/presentation/cubits/favorite/saved_cubit.dart';
 import 'package:news_paper_app/presentation/widgets/home_widgets/article_image.dart';
+import 'package:news_paper_app/presentation/widgets/home_widgets/latest_news_card.dart';
 import 'package:news_paper_app/presentation/widgets/responsive/responsive_content.dart';
 import 'package:news_paper_app/presentation/widgets/responsive/sliver_responsive_grid.dart';
 import 'package:news_paper_app/presentation/widgets/responsive_shell.dart';
 import 'package:news_paper_app/presentation/widgets/search_widgets/pagination_bar.dart';
+
+class _FakeSavedRepository implements BaseSavedRepository {
+  final List<Article> _items = [];
+
+  @override
+  Future<void> addSaved(Article article) async => _items.add(article);
+
+  @override
+  Future<void> clearSaved() async => _items.clear();
+
+  @override
+  Future<List<Article>> getSaved() async => List.unmodifiable(_items);
+
+  @override
+  Future<bool> isSaved(String url) async => _items.any((a) => a.url == url);
+
+  @override
+  Future<void> removeSaved(String url) async =>
+      _items.removeWhere((a) => a.url == url);
+}
 
 void main() {
   group('Responsive Breakpoint Unit Tests', () {
@@ -161,6 +186,48 @@ void main() {
       );
 
       expect(find.text('Card 0'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('LatestNewsCard IconButton Tests', () {
+    testWidgets('LatestNewsCard renders and toggles bookmark IconButton cleanly', (tester) async {
+      final cubit = SavedCubit(_FakeSavedRepository());
+      addTearDown(cubit.close);
+
+      final article = Article(
+        sourceId: 'bbc',
+        sourceName: 'BBC News',
+        author: 'Reporter',
+        title: 'Breaking news headline for testing latest news card layout',
+        description: 'Description',
+        url: 'https://example.com/article-1',
+        imageUrl: null,
+        publishedAt: DateTime(2026, 11, 11),
+        content: 'Content',
+      );
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: cubit,
+          child: MaterialApp(
+            home: Scaffold(
+              body: SizedBox(
+                width: 320,
+                child: LatestNewsCard(article: article, showDivider: true),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.bookmark_border), findsOneWidget);
+      expect(tester.takeException(), isNull);
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.bookmark), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
   });

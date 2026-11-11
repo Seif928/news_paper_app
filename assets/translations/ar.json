@@ -116,5 +116,22 @@
     "Password is too weak.": "كلمة المرور ضعيفة جدًا.",
     "This email is already registered.": "هذا البريد الإلكتروني مسجل بالفعل.",
     "Invalid email or password.": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
-    "Enter a valid email address.": "أدخل بريدًا إلكترونيًا صالحًا."
+    "Enter a valid email address.": "أدخل بريدًا إلكترونيًا صالحًا.",
+    "Changes to This Privacy Policy": "التغييرات على سياسة الخصوصية هذه",
+    "Children’s Privacy": "خصوصية الأطفال",
+    "Data Security": "أمان البيانات",
+    "Data Storage": "تخزين البيانات",
+    "Example: bbc-news, cnn": "مثال: bbc-news, cnn",
+    "Filter": "تصفية",
+    "Information We Collect": "المعلومات التي نجمعها",
+    "Internet Access": "الوصول إلى الإنترنت",
+    "Invalid email": "أدخل بريدًا إلكترونيًا صحيحًا",
+    "Last updated: September 2026": "آخر تحديث: سبتمبر 2026",
+    "News Content": "محتوى الأخبار",
+    "Remove from Saved": "إزالة من المحفوظة",
+    "Retry": "إعادة المحاولة",
+    "Save": "حفظ",
+    "Third-Party Services": "خدمات الطرف الثالث",
+    "Unknown date": "تاريخ غير معروف",
+    "password too short": "يجب أن تكون كلمة المرور 6 أحرف على الأقل"
 }
