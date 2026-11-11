@@ -11,12 +11,7 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
-  late int selectedIndex;
-  @override
-  void initState() {
-    selectedIndex = 0;
-    super.initState();
-  }
+  int selectedIndex = 0;
 
   final List<String> categoriesEn = const [
     'All',
@@ -41,79 +36,53 @@ class _CategoryListState extends State<CategoryList> {
   @override
   Widget build(BuildContext context) {
     context.locale;
-
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isArabic = context.locale.languageCode == 'ar';
+    final categories = isArabic ? categoriesAr : categoriesEn;
 
     return SizedBox(
       height: 44,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: categoriesEn.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        itemCount: categories.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
-          bool selected = selectedIndex == index;
-          if (Theme.of(context).brightness == Brightness.light) {
-            return ChoiceChip(
-              label: Text(
-                context.locale == const Locale('ar')
-                    ? categoriesAr[index]
-                    : categoriesEn[index],
-              ),
-              selected: selected,
-              onSelected: (_) {
-                if (categoriesEn[index] == 'All' ||
-                    categoriesAr[index] == 'الكل') {
-                  context.read<NewsCubit>().getTopHeadlines();
-                  return;
-                }
-                setState(() {
-                  selectedIndex = index;
-                  context.read<NewsCubit>().getTopHeadlines(
-                    category: categoriesEn[index],
-                  );
-                });
-              },
-              selectedColor: colorScheme.secondary,
-              backgroundColor: const Color(0xFFE4ECF7),
-              labelStyle: TextStyle(
-                color: selected ? Colors.white : colorScheme.secondary,
-                fontWeight: FontWeight.w500,
-              ),
-              side: BorderSide.none,
-              showCheckmark: false,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            );
-          }
+          final isSelected = selectedIndex == index;
           return ChoiceChip(
-            label: Text(
-              context.locale == const Locale('ar')
-                  ? categoriesAr[index]
-                  : categoriesEn[index],
-            ),
-            selected: selected,
+            label: Text(categories[index]),
+            selected: isSelected,
             onSelected: (_) {
-              if (categoriesEn[index] == 'All' ||
-                  categoriesAr[index] == 'الكل') {
-                context.read<NewsCubit>().getTopHeadlines();
-                return;
-              }
               setState(() {
                 selectedIndex = index;
+              });
+              if (index == 0) {
+                context.read<NewsCubit>().getTopHeadlines(refresh: true);
+              } else {
                 context.read<NewsCubit>().getTopHeadlines(
                   category: categoriesEn[index],
+                  refresh: true,
                 );
-              });
+              }
             },
-            selectedColor: colorScheme.onPrimary,
-            backgroundColor: const Color(0xFFE4ECF7),
+            selectedColor: colorScheme.secondary,
+            backgroundColor: theme.brightness == Brightness.light
+                ? const Color(0xFFE4ECF7)
+                : colorScheme.surfaceContainerHighest,
             labelStyle: TextStyle(
-              color: selected ? Colors.white : colorScheme.onPrimary,
-              fontWeight: FontWeight.w500,
+              color: isSelected
+                  ? Colors.white
+                  : (theme.brightness == Brightness.light
+                      ? colorScheme.secondary
+                      : colorScheme.onSurface),
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             ),
             side: BorderSide.none,
             showCheckmark: false,
-
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
           );
         },
       ),

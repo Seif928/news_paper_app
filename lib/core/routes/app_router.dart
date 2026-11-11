@@ -10,6 +10,7 @@ import 'package:news_paper_app/presentation/pages/home_page.dart';
 import 'package:news_paper_app/presentation/pages/notifications_page.dart';
 import 'package:news_paper_app/presentation/pages/search_page.dart';
 import 'package:news_paper_app/presentation/pages/settings_page.dart';
+import 'package:news_paper_app/presentation/widgets/responsive_shell.dart';
 
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -21,11 +22,13 @@ class AppRouter {
       case AppRoutes.registerPageRoute:
         return MaterialPageRoute(builder: (_) => const RegisterPage());
       case AppRoutes.homePageRoute:
-        return MaterialPageRoute(builder: (_) => const HomePage());
+        return MaterialPageRoute(
+          builder: (_) => const ResponsiveShell(child: HomePage()),
+        );
       case AppRoutes.searchPageRoute:
         final autoFocus = settings.arguments as bool? ?? false;
         return MaterialPageRoute(
-          builder: (_) => SearchPage(autoFocus: autoFocus),
+          builder: (_) => ResponsiveShell(child: SearchPage(autoFocus: autoFocus)),
         );
       case AppRoutes.articleDetailsPageRoute:
         final article = settings.arguments as Article;
@@ -33,15 +36,25 @@ class AppRouter {
           builder: (_) => ArticleDetailsPage(article: article),
         );
       case AppRoutes.notificationPageRoute:
-        return MaterialPageRoute(builder: (_) => const NotificationPage());
+        return MaterialPageRoute(
+          builder: (_) => ResponsiveShell(child: const NotificationPage()),
+        );
       case AppRoutes.savedPageRoute:
-        return MaterialPageRoute(builder: (_) => const SavedPage());
+        return MaterialPageRoute(
+          builder: (_) => ResponsiveShell(child: const SavedPage()),
+        );
       case AppRoutes.settingsPageRoute:
-        return MaterialPageRoute(builder: (_) => const SettingsPage());
+        return MaterialPageRoute(
+          builder: (_) => ResponsiveShell(child: const SettingsPage()),
+        );
       case AppRoutes.privacyPolicyPageRoute:
-        return MaterialPageRoute(builder: (_) => const PrivacyPolicyPage());
+        return MaterialPageRoute(
+          builder: (_) => const PrivacyPolicyPage(),
+        );
       default:
-        return MaterialPageRoute(builder: (_) => const HomePage());
+        return MaterialPageRoute(
+          builder: (_) => const ResponsiveShell(child: HomePage()),
+        );
     }
   }
 }

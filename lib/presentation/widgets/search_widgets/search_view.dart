@@ -4,8 +4,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/core/routes/app_routes.dart';
+import 'package:news_paper_app/core/utils/responsive.dart';
 import 'package:news_paper_app/presentation/cubits/search/search_cubit.dart';
 import 'package:news_paper_app/presentation/widgets/home_widgets/article_card.dart';
+import 'package:news_paper_app/presentation/widgets/responsive/responsive_content.dart';
+import 'package:news_paper_app/presentation/widgets/responsive/sliver_responsive_grid.dart';
 import 'package:news_paper_app/presentation/widgets/search_widgets/input_search.dart';
 import 'package:news_paper_app/presentation/widgets/search_widgets/pagination_bar.dart';
 import 'package:news_paper_app/presentation/widgets/search_widgets/search_filter_sheet.dart';
@@ -28,7 +31,6 @@ class _SearchViewState extends State<SearchView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_searchFocusNode);
-
       context.read<SearchCubit>().getRecentSearches();
     });
   }
@@ -48,12 +50,8 @@ class _SearchViewState extends State<SearchView> {
 
   void _performSearch(String query) {
     final trimedQuery = query.trim();
-
-    if (trimedQuery.isEmpty) {
-      return;
-    }
+    if (trimedQuery.isEmpty) return;
     _debounce?.cancel();
-
     context.read<SearchCubit>().search(trimedQuery);
   }
 
@@ -76,13 +74,17 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     context.locale;
+    final size = Responsive.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+            ResponsiveSliverPadding(
+              top: 16,
+              bottom: 16,
+              maxWidth: LayoutSizes.maxContentWidth,
+              sliver: SliverToBoxAdapter(
                 child: ValueListenableBuilder<TextEditingValue>(
                   valueListenable: _searchController,
                   builder: (context, value, _) {
@@ -95,9 +97,13 @@ class _SearchViewState extends State<SearchView> {
                             onChanged: _onSearchChanged,
                             autoFocus: true,
                             onBack: () {
-                              Navigator.of(
-                                context,
-                              ).pushReplacementNamed(AppRoutes.homePageRoute);
+                              if (Navigator.of(context).canPop()) {
+                                Navigator.of(context).pop();
+                              } else {
+                                Navigator.of(context).pushReplacementNamed(
+                                  AppRoutes.homePageRoute,
+                                );
+                              }
                             },
                             onSubmitted: (query) {
                               _searchFocusNode.unfocus();
@@ -113,8 +119,10 @@ class _SearchViewState extends State<SearchView> {
                             },
                           ),
                         ),
-                        IconButton(
+                        const SizedBox(width: 8),
+                        IconButton.filledTonal(
                           icon: const Icon(Icons.tune),
+                          tooltip: 'Filter'.tr(),
                           onPressed:
                               value.text.trim().isNotEmpty
                                   ? () => SearchFilterSheet.show(context)
@@ -126,155 +134,152 @@ class _SearchViewState extends State<SearchView> {
                 ),
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 36)),
-
             BlocBuilder<SearchCubit, SearchState>(
               builder: (context, state) {
                 if (state is RecentSearchesLoaded) {
                   final searches = state.searches;
-
-                  return SliverMainAxisGroup(
-                    slivers: [
-                      if (searches.isNotEmpty) ...[
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Recent Searches'.tr(),
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                                TextButton(
-                                  onPressed:
-                                      () =>
-                                          context
-                                              .read<SearchCubit>()
-                                              .clearSearches(),
-                                  child: Text('Clear'.tr()),
-                                ),
-                              ],
+                  return ResponsiveSliverPadding(
+                    maxWidth: LayoutSizes.maxListWidth,
+                    bottom: 24,
+                    sliver: SliverMainAxisGroup(
+                      slivers: [
+                        if (searches.isNotEmpty) ...[
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Recent Searches'.tr(),
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => context.read<SearchCubit>().clearSearches(),
+                                    child: Text('Clear'.tr()),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate((
-                            context,
-                            index,
-                          ) {
-                            final search = searches[index];
-                            return ListTile(
-                              leading: const Icon(Icons.history),
-                              title: Text(search.tr()),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed:
-                                    () => context
-                                        .read<SearchCubit>()
-                                        .removeSearch(search),
-                              ),
-                              onTap: () {
-                                _searchController.text = search;
-                                _performSearch(search);
-                              },
-                            );
-                          }, childCount: searches.length),
-                        ),
-                        const SliverToBoxAdapter(child: SizedBox(height: 24)),
-                      ],
-
-                      SliverPadding(
-                        padding: const EdgeInsets.only(
-                          bottom: 16,
-                          left: 8,
-                          right: 8,
-                        ),
-                        sliver: SliverToBoxAdapter(
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate((context, index) {
+                              final search = searches[index];
+                              return ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: const Icon(Icons.history),
+                                title: Text(search.tr()),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () => context.read<SearchCubit>().removeSearch(search),
+                                ),
+                                onTap: () {
+                                  _searchController.text = search;
+                                  _performSearch(search);
+                                },
+                              );
+                            }, childCount: searches.length),
+                          ),
+                          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                        ],
+                        SliverToBoxAdapter(
                           child: TrendingTopics(
-                            onTopicSelected:
-                                (value) => _selectTrendingTopic(value),
+                            onTopicSelected: (value) => _selectTrendingTopic(value),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                }
-                if (state is SearchSuggestionsLoaded) {
-                  final suggestions = state.suggestions;
-
-                  if (suggestions.isEmpty) {
-                    return const SliverToBoxAdapter(child: SizedBox.shrink());
-                  }
-
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      final suggestion = suggestions[index];
-                      return ListTile(
-                        leading: const Icon(Icons.search),
-                        title: Text(suggestion),
-                        onTap: () {
-                          _searchController.text = suggestion;
-                          _searchFocusNode.unfocus();
-                          _performSearch(suggestion);
-                        },
-                      );
-                    }, childCount: suggestions.length),
-                  );
-                }
-
-                if (state is SearchLoadingPage) {
-                  return const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Center(child: CircularProgressIndicator()),
+                      ],
                     ),
                   );
                 }
-                if (state is SearchLoading) {
-                  return const SliverToBoxAdapter(
+
+                if (state is SearchSuggestionsLoaded) {
+                  final suggestions = state.suggestions;
+                  if (suggestions.isEmpty) {
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
+                  }
+                  return ResponsiveSliverPadding(
+                    maxWidth: LayoutSizes.maxListWidth,
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final suggestion = suggestions[index];
+                        return ListTile(
+                          leading: const Icon(Icons.search),
+                          title: Text(suggestion),
+                          onTap: () {
+                            _searchController.text = suggestion;
+                            _searchFocusNode.unfocus();
+                            _performSearch(suggestion);
+                          },
+                        );
+                      }, childCount: suggestions.length),
+                    ),
+                  );
+                }
+
+                if (state is SearchLoadingPage || state is SearchLoading) {
+                  return const SliverFillRemaining(
+                    hasScrollBody: false,
                     child: Center(child: CircularProgressIndicator()),
                   );
                 }
 
                 if (state is SearchLoaded) {
                   final articles = state.articles;
-
-                  return SliverMainAxisGroup(
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) =>
-                              ArticleCard(article: articles[index]),
-                          childCount: articles.length,
+                  if (articles.isEmpty) {
+                    return SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(
+                          'No articles found'.tr(),
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
-                      SliverToBoxAdapter(
-                        child:
-                            articles.isNotEmpty
-                                ? PaginationBar(
-                                  currentPage: state.currentPage,
-                                  totalPages: state.totalPages,
-                                  onPageSelected:
-                                      (page) => context
-                                          .read<SearchCubit>()
-                                          .goToPage(page),
-                                )
-                                : Center(
-                                  child: Text(
-                                    'No articles found'.tr(),
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                ),
-                      ),
-                    ],
+                    );
+                  }
+
+                  return ResponsiveSliverPadding(
+                    maxWidth: LayoutSizes.maxContentWidth,
+                    bottom: 32,
+                    sliver: SliverMainAxisGroup(
+                      slivers: [
+                        if (size.isCompact)
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => ArticleCard(
+                                article: articles[index],
+                                margin: const EdgeInsets.only(bottom: 12),
+                              ),
+                              childCount: articles.length,
+                            ),
+                          )
+                        else
+                          SliverResponsiveGrid(
+                            itemCount: articles.length,
+                            minItemWidth: 320,
+                            maxColumns: 4,
+                            itemBuilder: (context, index) => ArticleCard(
+                              article: articles[index],
+                              margin: EdgeInsets.zero,
+                            ),
+                          ),
+                        SliverToBoxAdapter(
+                          child: PaginationBar(
+                            currentPage: state.currentPage,
+                            totalPages: state.totalPages,
+                            onPageSelected: (page) =>
+                                context.read<SearchCubit>().goToPage(page),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 }
 
                 if (state is SearchError) {
                   return SliverFillRemaining(
+                    hasScrollBody: false,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.all(24),
@@ -288,12 +293,8 @@ class _SearchViewState extends State<SearchView> {
                   );
                 }
 
-                return SliverPadding(
-                  padding: const EdgeInsets.only(
-                    right: 24,
-                    left: 24,
-                    bottom: 16,
-                  ),
+                return ResponsiveSliverPadding(
+                  maxWidth: LayoutSizes.maxListWidth,
                   sliver: SliverToBoxAdapter(
                     child: TrendingTopics(
                       onTopicSelected: (value) => _selectTrendingTopic(value),

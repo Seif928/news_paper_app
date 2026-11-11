@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:news_paper_app/core/network/dio_client.dart';
+import 'package:news_paper_app/core/service/news_country_service.dart';
+import 'package:news_paper_app/core/service/notification_storage_service.dart';
 import 'package:news_paper_app/data/datasource/local_data/saved_local_data_source.dart';
 import 'package:news_paper_app/data/datasource/local_data/news_local_data_source.dart';
 import 'package:news_paper_app/data/datasource/local_data/search_local_data_sorce.dart';
@@ -22,8 +25,10 @@ import 'package:news_paper_app/domain/repositories/base_user_repository.dart';
 import 'package:news_paper_app/domain/usecases/search/get_everthing_use_case.dart';
 import 'package:news_paper_app/domain/usecases/news/get_top_headlines_use_case.dart';
 import 'package:news_paper_app/presentation/cubits/auth/auth_cubit.dart';
+import 'package:news_paper_app/presentation/cubits/country/country_cubit.dart';
 import 'package:news_paper_app/presentation/cubits/favorite/saved_cubit.dart';
 import 'package:news_paper_app/presentation/cubits/news/news_cubit.dart';
+import 'package:news_paper_app/presentation/cubits/notification/notification_cubit.dart';
 import 'package:news_paper_app/presentation/cubits/search/search_cubit.dart';
 import 'package:news_paper_app/presentation/cubits/theme/theme_cubit.dart';
 
@@ -36,11 +41,18 @@ Future<void> initServiceLocator() async {
   final searchLocalDataSource = SearchLocalDataSource();
   await searchLocalDataSource.init();
   final googleSignIn = GoogleSignIn.instance;
-  await googleSignIn.initialize();
+  await googleSignIn.initialize(clientId: dotenv.env['GOOGLE_WEB_CLIENT_ID']);
   final themeLocalDataSource = ThemeModeLocalDataSource();
   await themeLocalDataSource.init();
   sl.registerLazySingleton<NewsLocalDataSource>(() => newsLocalDataSource);
 
+  sl.registerLazySingleton<NotificationStorageService>(
+    () => NotificationStorageService(),
+  );
+
+  sl.registerFactory<NotificationsCubit>(
+    () => NotificationsCubit(sl<NotificationStorageService>()),
+  );
   sl.registerLazySingleton<DioClient>(() => DioClient());
 
   sl.registerLazySingleton<NewsApiService>(
@@ -109,5 +121,10 @@ Future<void> initServiceLocator() async {
 
   sl.registerFactory<ThemeCubit>(
     () => ThemeCubit(sl<BaseThemeModeRepository>()),
+  );
+  sl.registerLazySingleton<NewsCountryService>(() => NewsCountryService());
+
+  sl.registerFactory<CountryCubit>(
+    () => CountryCubit(sl<NewsCountryService>()),
   );
 }

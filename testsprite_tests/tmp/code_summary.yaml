@@ -1,0 +1,18 @@
+project_name: news_paper_app
+description: "A Flutter news application with authentication, news feed, search, article details, saved/favorite articles, notifications, settings, and dark/light theme switching."
+tech_stack:
+  framework: Flutter (Dart)
+  state_management: Flutter BLoC / Cubit
+  backend_services: Firebase (Auth, Firestore, Messaging)
+  http_client: Dio
+  local_storage: Hive
+  localization: EasyLocalization (English & Arabic)
+  theme: Custom Light and Dark themes
+features:
+  - Authentication (Login, Register, Firebase Auth, Google & Facebook Sign-In)
+  - News Feed (Home page displaying news articles by categories)
+  - Search (Search articles by keyword)
+  - Article Details (View full article details and open external URL)
+  - Saved Articles (Bookmark and persist offline favorite articles using Hive)
+  - Notifications (Notification page, FCM background messaging, local notifications)
+  - Settings (Language selector, Theme switcher light/dark, Privacy Policy page)

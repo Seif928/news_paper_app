@@ -1,26 +1,30 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/core/routes/app_routes.dart';
-import 'package:news_paper_app/core/theme/app_theme.dart';
 import 'package:news_paper_app/core/utils/date_utils.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
-
 import 'package:news_paper_app/presentation/cubits/favorite/saved_cubit.dart';
+import 'package:news_paper_app/presentation/widgets/home_widgets/article_image.dart';
 
 class FeaturedArticleCard extends StatelessWidget {
   final Article article;
+  final EdgeInsetsGeometry? margin;
+  final double? imageHeight;
 
-  const FeaturedArticleCard({super.key, required this.article});
+  const FeaturedArticleCard({
+    super.key,
+    required this.article,
+    this.margin,
+    this.imageHeight,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     final isFavorite = context.watch<SavedCubit>().isSaved(article.url);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: margin ?? const EdgeInsets.symmetric(horizontal: 16),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: () {
@@ -38,23 +42,18 @@ class FeaturedArticleCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CachedNetworkImage(
-                imageUrl: article.imageUrl!,
-                width: double.infinity,
-                height: 300,
-                fit: BoxFit.cover,
-                errorWidget: (_, __, ___) {
-                  return Image.asset(
-                    'assets/images/Image-not-found.png',
-                    width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
-                  );
-                },
-              ),
-
+              imageHeight != null
+                  ? SizedBox(
+                      height: imageHeight,
+                      width: double.infinity,
+                      child: ArticleImage(imageUrl: article.imageUrl),
+                    )
+                  : AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: ArticleImage(imageUrl: article.imageUrl),
+                    ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 12, 12),
+                padding: const EdgeInsets.fromLTRB(20, 16, 16, 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -64,42 +63,38 @@ class FeaturedArticleCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.headlineSmall,
                     ),
-
-                    const SizedBox(height: 18),
-
+                    const SizedBox(height: 14),
                     Row(
                       children: [
                         CircleAvatar(
                           backgroundColor:
-                              Theme.of(context).colorScheme.primary,
+                              theme.colorScheme.primary,
                           radius: 16,
                           child: Text(
                             article.sourceName.isNotEmpty
                                 ? article.sourceName[0].toUpperCase()
                                 : '?',
                             style: theme.textTheme.bodySmall!.copyWith(
-                              color: AppTheme.backgroundColor,
+                              color: theme.colorScheme.onPrimary,
                             ),
                           ),
                         ),
-
-                        const SizedBox(width: 8),
-
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            '${article.sourceName} • '
-                            '${_publishedText()}',
+                            '${article.sourceName}${_publishedText().isNotEmpty ? ' • ${_publishedText()}' : ''}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.bodySmall,
                           ),
                         ),
-
                         IconButton(
                           onPressed: () {
                             context.read<SavedCubit>().toggleSaved(article);
                           },
                           icon: Icon(
-                            color: Theme.of(context).colorScheme.secondary,
                             isFavorite ? Icons.bookmark : Icons.bookmark_border,
+                            color: theme.colorScheme.secondary,
                           ),
                         ),
                       ],

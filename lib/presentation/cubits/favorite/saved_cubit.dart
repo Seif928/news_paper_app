@@ -82,10 +82,34 @@ class SavedCubit extends Cubit<SavedState> {
   }
 
   Future<void> toggleSaved(Article article) async {
-    if (isSaved(article.url)) {
-      await removeSaved(article.url);
+    final bool alreadySaved = isSaved(article.url);
+    final List<Article> previousFavorites = List.from(_favorites);
+
+    // 1. Optimistic Update
+    if (alreadySaved) {
+      _favorites.removeWhere((a) => a.url == article.url);
     } else {
-      await addSaved(article);
+      _favorites.add(article);
+    }
+    emit(SavedLoaded(List.unmodifiable(_favorites)));
+
+    try {
+      if (alreadySaved) {
+        await favoriteRepository.removeSaved(article.url);
+      } else {
+        await favoriteRepository.addSaved(article);
+      }
+    } catch (e) {
+      // 2. Rollback on failure
+      _favorites.clear();
+      _favorites.addAll(previousFavorites);
+      emit(SavedLoaded(List.unmodifiable(_favorites)));
+
+      if (e is CacheException) {
+        emit(SavedError(e.message));
+      } else {
+        emit(const SavedError('Something went wrong. Please try again.'));
+      }
     }
   }
 }

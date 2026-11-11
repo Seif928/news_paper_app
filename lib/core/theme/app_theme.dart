@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_paper_app/core/utils/responsive.dart';
 
 class AppTheme {
   static const Color primaryColor = Color(0xFF1A1A1A);
@@ -144,4 +145,29 @@ class AppTheme {
       ),
     ),
   );
+
+  static final Expando<Map<ScreenSize, ThemeData>> _adaptiveCache =
+      Expando<Map<ScreenSize, ThemeData>>('adaptiveTheme');
+
+  /// Returns [base] with a type scale tuned for [size].
+  ///
+  /// Compact screens keep the original mobile typography. Larger screens get
+  /// slightly bigger headlines so the visual hierarchy holds up when content
+  /// is displayed in wider layouts. Body text sizes are left unchanged.
+  static ThemeData adaptive(ThemeData base, ScreenSize size) {
+    if (size.isCompact) return base;
+
+    final cache = _adaptiveCache[base] ??= <ScreenSize, ThemeData>{};
+    return cache.putIfAbsent(size, () {
+      final t = base.textTheme;
+      final bool wide = size.isExpandedOrLarger;
+      return base.copyWith(
+        textTheme: t.copyWith(
+          headlineLarge: t.headlineLarge?.copyWith(fontSize: wide ? 36 : 34),
+          headlineMedium: t.headlineMedium?.copyWith(fontSize: wide ? 28 : 26),
+          headlineSmall: t.headlineSmall?.copyWith(fontSize: 22),
+        ),
+      );
+    });
+  }
 }

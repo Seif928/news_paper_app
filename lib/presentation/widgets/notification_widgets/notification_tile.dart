@@ -62,6 +62,8 @@ class NotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Dismissible(
       key: ValueKey(item.id),
       direction: DismissDirection.endToStart,
@@ -69,12 +71,12 @@ class NotificationTile extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.error.withValues(alpha: 0.9),
+          color: theme.colorScheme.error.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(
           Icons.delete_outline,
-          color: Theme.of(context).colorScheme.onSurface,
+          color: theme.colorScheme.onError,
         ),
       ),
       onDismissed: (_) => onDismiss(),
@@ -88,7 +90,7 @@ class NotificationTile extends StatelessWidget {
                     ? null
                     : Border(
                       bottom: BorderSide(
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
                         width: 0.6,
                       ),
                     ),
@@ -101,13 +103,13 @@ class NotificationTile extends StatelessWidget {
                 height: 40,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
+                  color: theme.colorScheme.secondary.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   _icon,
                   size: 20,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: theme.colorScheme.secondary,
                 ),
               ),
               const SizedBox(width: 12),
@@ -120,9 +122,7 @@ class NotificationTile extends StatelessWidget {
                         Expanded(
                           child: Text(
                             item.title,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium!.copyWith(
+                            style: theme.textTheme.bodyMedium!.copyWith(
                               fontWeight:
                                   item.isRead
                                       ? FontWeight.w400
@@ -138,7 +138,7 @@ class NotificationTile extends StatelessWidget {
                             width: 8,
                             height: 8,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.error,
+                              color: theme.colorScheme.secondary,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -148,18 +148,20 @@ class NotificationTile extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       item.body,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium!.copyWith(fontSize: 13),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontSize: 13,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 6),
                     Text(
                       _timeLabel(context),
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium!.copyWith(fontSize: 13),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.outline,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),

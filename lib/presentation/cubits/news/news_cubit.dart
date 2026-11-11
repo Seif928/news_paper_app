@@ -11,6 +11,7 @@ class NewsCubit extends Cubit<NewsState> {
 
   final List<Article> _articles = [];
 
+  String? _country;
   int _currentPage = 1;
   int _totalResult = 0;
 
@@ -27,6 +28,20 @@ class NewsCubit extends Cubit<NewsState> {
     String? category,
     bool refresh = false,
   }) async {
+    if (country != null) {
+      final newCountryCode = country.toLowerCase();
+
+      if (newCountryCode != _country) {
+        _country = newCountryCode;
+
+        // إعادة ضبط الصفحات عند تغيير الدولة.
+        _currentPage = 1;
+        _totalResult = 0;
+        _isLoadingMore = false;
+        _hasMore = true;
+      }
+    }
+    print('GET TOP HEADLINES CALLED');
     if (_isLoadingMore) return;
 
     if (refresh) {
@@ -39,6 +54,7 @@ class NewsCubit extends Cubit<NewsState> {
     emit(const NewsLoading());
 
     try {
+      print('API RESULT RECEIVED');
       final result = await getTopHeadlinesUseCase(
         country: country,
         category: category,
@@ -47,7 +63,8 @@ class NewsCubit extends Cubit<NewsState> {
       );
 
       final newArticles = result.articles;
-
+      print('Total Results: ${result.totalResults}');
+      print('Articles Count: ${newArticles.length}');
       _totalResult = result.totalResults;
 
       _articles
@@ -55,7 +72,6 @@ class NewsCubit extends Cubit<NewsState> {
         ..addAll(newArticles);
 
       _hasMore = newArticles.length == 12;
-
       emit(NewsLoaded(List.unmodifiable(_articles), hasMore: _hasMore));
     } on NetworkException catch (e) {
       emit(NewsError(e.message));

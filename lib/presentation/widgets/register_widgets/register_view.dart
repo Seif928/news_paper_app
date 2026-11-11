@@ -77,13 +77,16 @@ class _RegisterViewState extends State<RegisterView> {
           builder: (context, state) {
             final isLoading = state is AuthLoading;
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 440),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                     Text('Create account'.tr(), style: textTheme.headlineLarge),
                     const SizedBox(height: 8),
                     Text(
@@ -242,7 +245,9 @@ class _RegisterViewState extends State<RegisterView> {
                   ],
                 ),
               ),
-            );
+            ),
+          ),
+        );
           },
         ),
       ),
