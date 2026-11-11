@@ -4,7 +4,6 @@ import 'package:hive/hive.dart';
 import 'package:news_paper_app/core/errors/exceptions.dart';
 import 'package:news_paper_app/core/utils/date_utils.dart';
 import 'package:news_paper_app/data/models/article_model.dart';
-import 'package:news_paper_app/presentation/widgets/notification_widgets/empty_state.dart';
 
 class SavedLocalDataSource {
   static const String _boxName = 'news_cache';
@@ -17,7 +16,6 @@ class SavedLocalDataSource {
       return entries.map((e) => e['article'] as ArticleModel).toList();
     } catch (e) {
       if (e is CacheException) rethrow;
-      if (e is EmptyState) rethrow;
       throw const CacheException('Failed to load favorite articles.');
     }
   }
@@ -99,7 +97,7 @@ class SavedLocalDataSource {
             .map(
               (e) => {
                 'article': (e['article'] as ArticleModel).toJson(),
-                'savedAt': DateUtilsApp.formatDate(e['savedAt']),
+                'savedAt': (e['savedAt'] as DateTime?)?.toIso8601String(),
               },
             )
             .toList();

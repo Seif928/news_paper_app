@@ -23,7 +23,6 @@ dependencies:
   firebase_messaging: ^16.7.1
   flutter_bloc: ^9.1.1
   flutter_dotenv: ^6.0.1
-  flutter_facebook_auth: ^7.2.0
   flutter_local_notifications: ^19.5.0
   geocoder_pro: ^1.1.0
   geolocator: ^14.1.2
@@ -40,6 +39,18 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/logos/app_icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/logos/app_icon_foreground.png"
+  web:
+    generate: true
+    image_path: "assets/logos/app_icon.png"
+    background_color: "#FFFFFF"
+    theme_color: "#1B3B8B"
 
 flutter:
   uses-material-design: true

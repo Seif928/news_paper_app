@@ -10,13 +10,14 @@ import 'package:news_paper_app/presentation/pages/home_page.dart';
 import 'package:news_paper_app/presentation/pages/notifications_page.dart';
 import 'package:news_paper_app/presentation/pages/search_page.dart';
 import 'package:news_paper_app/presentation/pages/settings_page.dart';
+import 'package:news_paper_app/presentation/pages/splash_page.dart';
 import 'package:news_paper_app/presentation/widgets/responsive_shell.dart';
 
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case AppRoutes.splashPageRoute:
-      //   return MaterialPageRoute(builder: (_) => const SplashPage());
+      case AppRoutes.splashPageRoute:
+        return MaterialPageRoute(builder: (_) => const SplashPage());
       case AppRoutes.loginPageRoute:
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case AppRoutes.registerPageRoute:

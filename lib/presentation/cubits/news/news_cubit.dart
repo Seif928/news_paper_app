@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_paper_app/core/errors/exceptions.dart';
 import 'package:news_paper_app/domain/entities/article.dart';
@@ -41,7 +42,7 @@ class NewsCubit extends Cubit<NewsState> {
         _hasMore = true;
       }
     }
-    print('GET TOP HEADLINES CALLED');
+    debugPrint('GET TOP HEADLINES CALLED');
     if (_isLoadingMore) return;
 
     if (refresh) {
@@ -54,7 +55,7 @@ class NewsCubit extends Cubit<NewsState> {
     emit(const NewsLoading());
 
     try {
-      print('API RESULT RECEIVED');
+      debugPrint('API RESULT RECEIVED');
       final result = await getTopHeadlinesUseCase(
         country: country,
         category: category,
@@ -63,8 +64,8 @@ class NewsCubit extends Cubit<NewsState> {
       );
 
       final newArticles = result.articles;
-      print('Total Results: ${result.totalResults}');
-      print('Articles Count: ${newArticles.length}');
+      debugPrint('Total Results: ${result.totalResults}');
+      debugPrint('Articles Count: ${newArticles.length}');
       _totalResult = result.totalResults;
 
       _articles
