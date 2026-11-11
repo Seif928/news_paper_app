@@ -11,9 +11,10 @@ class SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4),
       child: Text(
         label,
-        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+        style: Theme.of(context).textTheme.labelLarge!.copyWith(
           letterSpacing: 1.2,
           color: Theme.of(context).colorScheme.secondary,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

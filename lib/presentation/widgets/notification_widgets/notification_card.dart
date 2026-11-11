@@ -16,11 +16,15 @@ class NotificationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: theme.colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Theme.of(context).colorScheme.onSurface),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: Column(
         children: [

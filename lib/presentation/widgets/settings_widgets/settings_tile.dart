@@ -30,7 +30,7 @@ class SettingsTile extends StatelessWidget {
                     bottom: BorderSide(
                       color: Theme.of(
                         context,
-                      ).colorScheme.outlineVariant.withOpacity(0.5),
+                      ).colorScheme.outlineVariant.withValues(alpha: 0.5),
                       width: 0.6,
                     ),
                   ),

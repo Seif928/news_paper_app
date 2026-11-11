@@ -1,57 +1,51 @@
 name: news_paper_app
-description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
+description: "A Flutter news application with authentication, news feed, search, article details, saved/favorite articles, notifications, settings, and dark/light theme switching."
+publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.2
-
+  sdk: ^3.10.0
 
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^2.1.0
-  
-  url_launcher: ^6.3.2
+  cached_network_image: ^3.4.1
+  cloud_firestore: ^6.10.1
+  country_picker: ^2.0.28
+  cupertino_icons: ^1.0.9
   dartz: ^0.10.1
-  cupertino_icons: ^1.0.8
+  dio: ^5.11.1
+  easy_localization: ^3.0.8
+  equatable: ^2.1.0
+  firebase_auth: ^6.7.1
+  firebase_core: ^4.15.1
+  firebase_messaging: ^16.7.1
   flutter_bloc: ^9.1.1
-  dio: ^5.11.0
-  google_fonts: ^6.3.2
   flutter_dotenv: ^6.0.1
-  get_it: ^9.2.1
+  flutter_facebook_auth: ^7.2.0
+  flutter_local_notifications: ^19.5.0
+  geocoder_pro: ^1.1.0
+  geolocator: ^14.1.2
+  get_it: ^9.3.0
+  google_fonts: ^6.3.3
+  google_sign_in: ^7.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  cached_network_image: ^3.4.1
-  easy_localization: ^3.0.8 
-  firebase_core: ^4.14.0
-  firebase_auth: ^6.6.1
-  cloud_firestore: ^6.9.0
-  google_sign_in: ^7.2.0
-  flutter_facebook_auth: ^7.1.6
-  flutter_local_notifications: ^19.5.0
-  firebase_messaging: ^16.7.0
+  timezone: ^0.10.1
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
-
+  flutter_launcher_icons: ^0.14.4
+  flutter_lints: ^6.0.0
 
 flutter:
-
- 
   uses-material-design: true
   assets:
     - .env
-    - assets/images/Image-not-found.png
-    - assets/translations/en.json
-    - assets/translations/ar.json
-    - assets/logo's/Google__G__logo.svg.webp    
-    - assets/images/photo_2026-07-16_03-07-31.jpg
+    - assets/images/
+    - assets/logos/
+    - assets/translations/
 
- 

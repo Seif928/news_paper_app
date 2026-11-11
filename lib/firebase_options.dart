@@ -66,6 +66,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '13035281684',
     projectId: 'alakhbar-5f66d',
     storageBucket: 'alakhbar-5f66d.firebasestorage.app',
+    androidClientId: '13035281684-limuvepuojfuuei26qb5ejsvkdp3epod.apps.googleusercontent.com',
     iosClientId: '13035281684-cnegq8ksem0tgqtvesdu1sg22pg846g5.apps.googleusercontent.com',
     iosBundleId: 'com.example.newsPaperApp',
   );
@@ -75,6 +76,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '13035281684',
     projectId: 'alakhbar-5f66d',
     storageBucket: 'alakhbar-5f66d.firebasestorage.app',
+    androidClientId: '13035281684-limuvepuojfuuei26qb5ejsvkdp3epod.apps.googleusercontent.com',
     iosClientId: '13035281684-cnegq8ksem0tgqtvesdu1sg22pg846g5.apps.googleusercontent.com',
     iosBundleId: 'com.example.newsPaperApp',
   );

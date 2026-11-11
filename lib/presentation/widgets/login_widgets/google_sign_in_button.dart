@@ -43,7 +43,7 @@ class GoogleSignInButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/logo\'s/Google__G__logo.svg.webp',
+                      'assets/logos/Google__G__logo.svg.webp',
                       width: 20,
                       height: 20,
                       errorBuilder:

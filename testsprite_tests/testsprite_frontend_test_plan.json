@@ -1,0 +1,785 @@
+[
+  {
+    "id": "TC001",
+    "title": "Authenticate and land on the home feed",
+    "description": "A user can log in with valid credentials and reach the main news feed after authentication.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the home feed is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify categories are available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Restore a persisted session on app launch",
+    "description": "A returning user with an existing session is taken directly into the authenticated app without needing to log in again.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the home feed is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user remains authenticated"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Restore the home feed after app launch",
+    "description": "Verifies that a user reaches the main news feed after launch or session restore and can see category content loaded.",
+    "category": "Saved Articles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the main news feed is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify category content is loaded"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Open an article from the feed and view its details",
+    "description": "Verifies that a user can open a news item from the feed and see the article details page.",
+    "category": "Saved Articles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open an article from the news feed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the article details are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an external article link is available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Browse a category and open an article",
+    "description": "A user can switch to a news category, open an article, and view its full details and external link.",
+    "category": "News Feed & Article Browsing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Select a different news category"
+      },
+      {
+        "type": "action",
+        "description": "Open an article from the category feed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the article details page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the external article link is available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Save an article and see it in saved items",
+    "description": "Verifies that a user can bookmark an article and later find it in the saved articles list.",
+    "category": "Saved Articles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open an article from the news feed"
+      },
+      {
+        "type": "action",
+        "description": "Save the article"
+      },
+      {
+        "type": "action",
+        "description": "Open the saved articles list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved article is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the article remains available in saved items"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Search for articles and refine the query",
+    "description": "A user can search for news, see live result updates, and open a matching article from the refined results.",
+    "category": "Search",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the search screen"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the search field with a breaking news topic"
+      },
+      {
+        "type": "action",
+        "description": "Refine the search field with a more specific keyword phrase"
+      },
+      {
+        "type": "action",
+        "description": "Open a matching article from the updated results"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the article details page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated search results were shown before navigation"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Search for breaking news and review live results",
+    "description": "Verifies that a user can search for a topic and see matching results update in the list.",
+    "category": "Saved Articles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open search"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the search field with a breaking news topic"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching search results are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Change theme and language settings",
+    "description": "Verifies that a user can switch theme and language in settings and see the interface update.",
+    "category": "Settings & Customization",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open the settings screen"
+      },
+      {
+        "type": "action",
+        "description": "Change the theme setting to dark mode"
+      },
+      {
+        "type": "action",
+        "description": "Change the language setting to Arabic"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the interface updates to the selected theme"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the interface updates to the selected language"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Browse saved articles after saving one",
+    "description": "A user can save an article for later and confirm it appears in the saved articles list.",
+    "category": "News Feed & Article Browsing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open an article from the feed"
+      },
+      {
+        "type": "action",
+        "description": "Save the article for later"
+      },
+      {
+        "type": "action",
+        "description": "Open the saved articles screen"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved article appears in the saved list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "View notifications and open a notification detail",
+    "description": "Verifies that a user can browse in-app notifications and open one to see its details.",
+    "category": "Notifications",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open the notifications screen"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify notifications are displayed"
+      },
+      {
+        "type": "action",
+        "description": "Open a notification item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the notification details are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Switch language and theme settings and retain them after relaunch",
+    "description": "A user can change the app language and theme and see those preferences persist after reopening the app.",
+    "category": "Settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the settings screen"
+      },
+      {
+        "type": "action",
+        "description": "Switch the app language"
+      },
+      {
+        "type": "action",
+        "description": "Toggle the app theme"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected language is still applied"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected theme is still applied"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Keep settings after relaunch",
+    "description": "Verifies that theme and language preferences remain applied after leaving and returning to the app.",
+    "category": "Settings & Customization",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open the settings screen"
+      },
+      {
+        "type": "action",
+        "description": "Change the theme setting to light mode"
+      },
+      {
+        "type": "action",
+        "description": "Change the language setting to English"
+      },
+      {
+        "type": "action",
+        "description": "Navigate away from the app and return to it"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected theme is still applied"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected language is still applied"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Open a notification and navigate to the related article",
+    "description": "A user can view notifications, open a notification detail, and continue to the linked article.",
+    "category": "Notifications",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the notifications screen"
+      },
+      {
+        "type": "action",
+        "description": "Open a notification detail"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the related article from the notification"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the related article details page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the notification detail was opened"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "View offline saved articles and resume normal browsing later",
+    "description": "A user can open previously saved content while offline, remove a saved item, and then return to normal browsing once connectivity is restored.",
+    "category": "Offline and Saved Content",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open an article from the feed"
+      },
+      {
+        "type": "action",
+        "description": "Save the article for later"
+      },
+      {
+        "type": "action",
+        "description": "Open the saved articles screen"
+      },
+      {
+        "type": "action",
+        "description": "Open the saved article while offline"
+      },
+      {
+        "type": "action",
+        "description": "Remove the article from saved items"
+      },
+      {
+        "type": "action",
+        "description": "Return to the main feed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify previously saved content can still be opened while offline"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify normal browsing is available again after returning online"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC016",
+    "title": "Remove an article from saved items",
+    "description": "Verifies that a user can remove a saved article and no longer see it in the saved list.",
+    "category": "Saved Articles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open the saved articles list"
+      },
+      {
+        "type": "action",
+        "description": "Open a saved article"
+      },
+      {
+        "type": "action",
+        "description": "Remove the article from saved items"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved article is no longer displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state is shown when no saved articles remain"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC017",
+    "title": "Open the privacy policy page",
+    "description": "Verifies that a user can access the privacy policy content from the app.",
+    "category": "Settings & Customization",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open the privacy policy page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify privacy policy content is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC018",
+    "title": "Show an empty state for unmatched search",
+    "description": "A user sees an empty search result state when a query has no matches.",
+    "category": "Search",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the search screen"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the search field with an unmatched keyword"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty search results state is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC019",
+    "title": "Reject invalid login credentials",
+    "description": "A user sees a login failure and remains unauthenticated when entering invalid credentials.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with invalid@example.com"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with an incorrect password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a login validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is not authenticated"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC020",
+    "title": "Show an empty saved articles state",
+    "description": "Verifies that the saved articles screen shows an empty state when no bookmarks exist.",
+    "category": "Saved Articles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open the saved articles list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC021",
+    "title": "Show an empty notifications state",
+    "description": "Verifies that the notifications screen shows an empty state when no notifications have been received.",
+    "category": "Notifications",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open the notifications screen"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC022",
+    "title": "Open a non-existent article safely",
+    "description": "A user is shown a clean not-found state when opening an article that does not exist.",
+    "category": "News Feed & Article Browsing",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open an invalid article from the app's available navigation path if exposed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an article not found state is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC023",
+    "title": "Handle an unsupported language selection",
+    "description": "Verifies that choosing an unsupported locale shows a validation error and does not change the app language.",
+    "category": "Settings & Customization",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the app home route"
+      },
+      {
+        "type": "action",
+        "description": "Open the settings screen"
+      },
+      {
+        "type": "action",
+        "description": "Change the language setting to an unsupported locale"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a language validation error is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the current language remains unchanged"
+      }
+    ],
+    "priority": "Low"
+  }
+]

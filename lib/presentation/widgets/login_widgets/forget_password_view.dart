@@ -69,9 +69,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               return _buildSuccessView(context, colorScheme, textTheme);
             }
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Form(
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 440),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,11 +152,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                   ],
                 ),
               ),
-            );
-          },
-        ),
-      ),
-    );
+            ),
+          ),
+        );
+      },
+    ),
+  ),
+);
   }
 
   Widget _buildSuccessView(
@@ -161,18 +166,21 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     ColorScheme colorScheme,
     TextTheme textTheme,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              color: colorScheme.secondary.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 440),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: colorScheme.secondary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
             child: Icon(
               Icons.mark_email_read_outlined,
               color: colorScheme.secondary,
@@ -209,6 +217,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           ),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 }

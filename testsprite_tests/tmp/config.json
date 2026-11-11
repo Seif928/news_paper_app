@@ -1,0 +1,16 @@
+{
+  "status": "init",
+  "scope": "codebase",
+  "type": "frontend",
+  "localEndpoint": "http://localhost:5173/",
+  "serverPort": 59427,
+  "executionArgs": {
+    "projectName": "news_paper_app",
+    "projectPath": "C:\\Users\\Seif\\Desktop\\Applications flutter\\news-paper-app\\news_paper_app",
+    "testIds": [],
+    "additionalInstruction": "This is a Flutter web app running on port 5173. The app starts on the login page (/login). It uses Firebase Auth for authentication. The app has a drawer-based navigation with Home, Search, Saved, Notifications, and Settings pages. Login fields are email and password text fields.",
+    "serverMode": "development",
+    "envs": {},
+    "envsFile": "C:\\Users\\Seif\\AppData\\Local\\Temp\\.testsprite-mcp-user\\session-0f7e1a9ab2cfe381.json"
+  }
+}

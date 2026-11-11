@@ -19,15 +19,16 @@ class NewsApiService {
       final response = await _dio.get(
         ApiConstants.topHeadLines,
         queryParameters: {
-          'country': country,
-          'category': category,
-          'sources': source,
+          if (country != null) 'country': country,
+          if (category != null) 'category': category,
+          if (source != null) 'sources': source,
           'page': page,
           'pageSize': pageSize,
         },
       );
       print(response.requestOptions.queryParameters);
-
+      print('STATUS CODE: ${response.statusCode}');
+      print('RESPONSE DATA: ${response.data}');
       return response;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError ||
